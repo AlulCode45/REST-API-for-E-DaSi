@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:8000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibmFtYSI6Ik1lbGFueV9SZW1wZWwzMyIsInVzZXJuYW1lIjoib3BlcmF0b3IiLCJyb2xlIjoib3BlcmF0b3IiLCJpYXQiOjE3MTg5ODE5MzEsImV4cCI6MTcxODk4OTEzMX0.-IDKHoBDGIey1idKrTF_kz7N7_2r5ZSId0D2AHWTzK8
+
+### Auth Request
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "operator",
+    "password": "12345"
+}
+
+
+### Logout Request
+POST {{baseUrl}}/auth/logout HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Guru
+GET  {{baseUrl}}/guru HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Tambah guru
+POST {{baseUrl}}/guru HTTP/1.1
+Authorization: Bearer {{token}}
+Accept: application/json
+
+{
+    "nama": "Aripin",
+    "nip": "1786762",
+    "alamat": "7328 Rudy Circle"
+}

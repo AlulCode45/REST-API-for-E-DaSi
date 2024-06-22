@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Operator {
+  id          Int           @id @default(autoincrement())
+  nama        String
+  username    String        @unique
+  password    String
+  fotoProfile String?       @default("profile.jpg")
+  token       String?
+  role        RoleOperator? @default(operator)
+}
+
+enum RoleOperator {
+  operator
+}
+
+model Siswa {
+  id           Int        @id @default(autoincrement())
+  nama         String
+  nis          String     @unique
+  tanggalLahir DateTime
+  alamat       String
+  jenisKelamin String
+  kelasId      Int
+  kelas        Kelas      @relation(fields: [kelasId], references: [id])
+  orangTua     OrangTua[]
+  createdAt    DateTime?  @default(now())
+  updatedAt    DateTime?  @updatedAt
+}
+
+model Kelas {
+  id            Int         @id @default(autoincrement())
+  nama          String
+  jurusanId     Int
+  jurusan       Jurusan     @relation(fields: [jurusanId], references: [id])
+  tahunAjaranId Int
+  tahunAjaran   TahunAjaran @relation(fields: [tahunAjaranId], references: [id])
+  siswa         Siswa[]
+  createdAt     DateTime?   @default(now())
+  updatedAt     DateTime?   @updatedAt
+}
+
+model Jurusan {
+  id        Int       @id @default(autoincrement())
+  nama      String
+  deskripsi String?
+  kelas     Kelas[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Guru {
+  id            Int             @id @default(autoincrement())
+  nama          String
+  nip           String          @unique
+  alamat        String
+  mataPelajaran MataPelajaran[]
+  createdAt     DateTime?       @default(now())
+  updatedAt     DateTime?       @updatedAt
+}
+
+model MataPelajaran {
+  id        Int       @id @default(autoincrement())
+  nama      String
+  kode      String    @unique
+  guruId    Int
+  guru      Guru      @relation(fields: [guruId], references: [id])
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model TahunAjaran {
+  id        Int       @id @default(autoincrement())
+  tahun     String    @unique
+  kelas     Kelas[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model OrangTua {
+  id        Int       @id @default(autoincrement())
+  nama      String
+  hubungan  String
+  telepon   String
+  alamat    String
+  siswaId   Int
+  siswa     Siswa     @relation(fields: [siswaId], references: [id])
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
