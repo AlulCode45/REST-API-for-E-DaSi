@@ -36,7 +36,8 @@ async function insertGuru(req: Request, res: Response) {
 
     } catch (error) {
         return res.status(400).json({
-            error: error
+            error: error,
+            data: save
         })
     } finally {
         await prisma.$disconnect()
@@ -67,6 +68,11 @@ async function updateGuru(req: Request, res: Response) {
         })
     } catch (error) {
         return res.status(400).json({
+            data: {
+                nama: nama,
+                nip: nip,
+                alamat: alamat
+            },
             error: error
         })
     } finally {

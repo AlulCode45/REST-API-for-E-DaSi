@@ -19,7 +19,7 @@ model Operator {
   username    String        @unique
   password    String
   fotoProfile String?       @default("profile.jpg")
-  token       String?
+  token       String?       @db.Text
   role        RoleOperator? @default(operator)
 }
 
@@ -31,7 +31,8 @@ model Siswa {
   id           Int        @id @default(autoincrement())
   nama         String
   nis          String     @unique
-  tanggalLahir DateTime
+  nisn         Int        @unique
+  tanggalLahir DateTime   @db.Date
   alamat       String
   jenisKelamin String
   kelasId      Int
@@ -91,13 +92,14 @@ model TahunAjaran {
 }
 
 model OrangTua {
-  id        Int       @id @default(autoincrement())
-  nama      String
-  hubungan  String
-  telepon   String
-  alamat    String
-  siswaId   Int
-  siswa     Siswa     @relation(fields: [siswaId], references: [id])
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id           Int       @id @default(autoincrement())
+  nama         String
+  hubungan     String
+  telepon      String
+  alamat       String
+  tanggalLahir DateTime  @db.Date
+  siswaId      Int
+  siswa        Siswa     @relation(fields: [siswaId], references: [id])
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
 }

@@ -12,7 +12,7 @@ async function login(req: Request, res: Response) {
             }
         });
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch:boolean = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
             return res.status(401).json({
@@ -20,7 +20,7 @@ async function login(req: Request, res: Response) {
             });
         }
 
-        const expireIn = 60 * 60 * 2
+        const expireIn:number = 60 * 60 * 2
 
         const token = jwt.sign({
             id: user.id,
