@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { login, logout } from '../controller/authController';
+import { login, logout, refreshToken, validateToken } from '../controller/authController';
 import { deleteGuru, guru, insertGuru, showGuru, updateGuru } from '../controller/guruController';
 import { operatorMiddleware } from '../middleware/operatorMiddleware';
 import { deleteOrangTua, insertOrangTua, orangTua, showOrangTua, updateOrangTua } from '../controller/orangtuaController';
@@ -13,8 +13,11 @@ const router: Router = express.Router();
 router.post('/auth/login', login)
 router.post('/auth/logout', logout)
 
-// Guru Router
 router.use(operatorMiddleware);
+router.get('/auth/validate', validateToken)
+router.get('/auth/refresh', refreshToken)
+
+// Guru Router
 router.get('/guru', guru)
 router.post('/guru', insertGuru)
 router.put('/guru/:id', updateGuru)

@@ -12,7 +12,7 @@ async function login(req: Request, res: Response) {
             }
         });
 
-        const passwordMatch:boolean = await bcrypt.compare(password, user.password);
+        const passwordMatch: boolean = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
             return res.status(401).json({
@@ -20,7 +20,7 @@ async function login(req: Request, res: Response) {
             });
         }
 
-        const expireIn:number = 60 * 60 * 2
+        const expireIn: number = 60 * 60 * 2
 
         const token = jwt.sign({
             id: user.id,
@@ -90,7 +90,54 @@ async function logout(req: Request, res: Response) {
         return res.status(400).json({ message: "Error", error: error || 'An error occurred' });
     }
 }
+
+async function validateToken(req: Request, res: Response) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Authorization header is missing' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token is missing' });
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+        return res.status(200).json({ message: 'Valid', data: decoded });
+    } catch (error) {
+        return res.status(400).json({ message: "Error", error: error || 'An error occurred' });
+    }
+}
+
+async function refreshToken(req: Request, res: Response) {
+    const authHeader = req.headers.authorization;
+    const { id, nama, username, role } = req.body
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Authorization header is missing' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token is missing' });
+    }
+    try {
+        const expireIn: number = 60 * 60 * 2
+        const token = jwt.sign({
+            id: id,
+            nama: nama,
+            username: username,
+            role: role
+        }, process.env.JWT_SECRET!, {
+            expiresIn: expireIn
+        })
+        return res.status(200).json({ message: 'Success', data: token });
+    } catch (error) {
+        return res.status(400).json({ message: "Error", error: error || 'An error occurred' });
+    }
+}
+
 export {
     login,
-    logout
+    logout,
+    validateToken, refreshToken
 }
