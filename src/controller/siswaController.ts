@@ -65,48 +65,80 @@ async function showSiswa(req: Request, res: Response) {
     }
 }
 async function deleteSiswa(req: Request, res: Response) {
-    const { id } = req.params
+    const { id } = req.params;
+
     try {
+        // Parsing id to integer
+        const nisn = parseInt(id, 10);
+
+        // Memastikan siswa dengan nisn tersebut ada
+        const siswa = await prisma.siswa.findUnique({
+            where: { nisn }
+        });
+
+        if (!siswa) {
+            return res.status(404).json({
+                message: "Siswa tidak ditemukan"
+            });
+        }
+
+        // Menghapus semua orang tua yang terkait dengan siswa ini
+        await prisma.orangTua.deleteMany({
+            where: {
+                siswaId: siswa.id
+            }
+        });
+
+        // Menghapus siswa
         await prisma.siswa.delete({
             where: {
-                id: parseInt(id)
+                nisn
             }
-        })
+        });
+
         return res.json({
             message: "Success"
-        })
+        });
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
-        await prisma.$disconnect()
+        await prisma.$disconnect();
     }
 }
 async function insertSiswa(req: Request, res: Response) {
-    const { nama, nis, nisn, alamat, jenisKelamin, kelasId, tanggalLahir } = req.body
+    const { nama, nis, nisn, alamat, jenisKelamin, kelasId, tanggalLahir } = req.body;
+
+    // Validasi input
+    if (!nama || !nis || !nisn || !alamat || !jenisKelamin || !kelasId || !tanggalLahir) {
+        return res.status(400).json({
+            error: "All fields are required"
+        });
+    }
+
     try {
         const saveSiswa = {
-            nisn: nisn,
+            nisn: parseInt(nisn, 10),
             nama: nama,
             alamat: alamat,
             jenisKelamin: jenisKelamin,
-            kelasId: kelasId,
+            kelasId: parseInt(kelasId, 10),
             nis: nis,
-            tanggalLahir: tanggalLahir
-        }
+            tanggalLahir: new Date(tanggalLahir)
+        };
 
-        await prisma.siswa.create({
+        const createdSiswa = await prisma.siswa.create({
             data: saveSiswa
-        })
+        });
 
         return res.json({
-            data: saveSiswa,
+            data: createdSiswa,
             message: "Success"
-        })
+        });
     } catch (error) {
         return res.status(400).json({
-            error: error,
+            error: error || 'An error occurred',
             data: {
                 nisn: nisn,
                 nama: nama,
@@ -116,9 +148,9 @@ async function insertSiswa(req: Request, res: Response) {
                 nis: nis,
                 tanggalLahir: tanggalLahir
             }
-        })
+        });
     } finally {
-        await prisma.$disconnect()
+        await prisma.$disconnect();
     }
 }
 async function updateSiswa(req: Request, res: Response) {
