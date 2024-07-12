@@ -32,11 +32,11 @@ async function siswa(req: Request, res: Response) {
     }
 }
 async function showSiswa(req: Request, res: Response) {
-    const { id } = req.params
+    const { id } = req.params // NISN
     try {
         const siswa = await prisma.siswa.findFirstOrThrow({
             where: {
-                id: parseInt(id)
+                nisn: parseInt(id)
             },
             include: {
                 kelas: {
@@ -65,7 +65,7 @@ async function showSiswa(req: Request, res: Response) {
     }
 }
 async function deleteSiswa(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.params; // NISN
 
     try {
         // Parsing id to integer
@@ -154,21 +154,21 @@ async function insertSiswa(req: Request, res: Response) {
     }
 }
 async function updateSiswa(req: Request, res: Response) {
-    const { id } = req.params
+    const { id } = req.params // NISN
     const { nama, nis, alamat, jenisKelamin, kelasId, tanggalLahir, nisn } = req.body
     try {
         const newData = {
-            nisn: nisn,
+            nisn: parseInt(nisn),
             nama: nama,
             alamat: alamat,
             jenisKelamin: jenisKelamin,
             kelasId: kelasId,
             nis: nis,
-            tanggalLahir: tanggalLahir
+            tanggalLahir: new Date(tanggalLahir)
         }
         await prisma.siswa.update({
             where: {
-                id: parseInt(id),
+                nisn: parseInt(id),
             },
             data: newData
         })
