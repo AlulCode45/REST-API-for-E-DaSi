@@ -26,7 +26,7 @@ async function orangTua(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
@@ -62,7 +62,7 @@ async function showOrangTua(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
@@ -81,7 +81,7 @@ async function deleteOrangTua(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {

@@ -15,7 +15,7 @@ async function kelas(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
@@ -40,7 +40,7 @@ async function showKelas(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
@@ -50,16 +50,28 @@ async function showKelas(req: Request, res: Response) {
 async function deleteKelas(req: Request, res: Response) {
     const { id } = req.params
     try {
+        await prisma.orangTua.deleteMany({
+            where: {
+                siswa: {
+                    kelasId: parseInt(id)
+                }
+            }
+        });
+        await prisma.siswa.deleteMany({
+            where: {
+                kelasId: parseInt(id)
+            }
+        })
         await prisma.kelas.delete({
             where: {
-                id: parseInt(id)
+                id: parseInt(id),
             }
         })
         return res.json({
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {

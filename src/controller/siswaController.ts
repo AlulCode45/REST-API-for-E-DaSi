@@ -24,7 +24,7 @@ async function siswa(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
@@ -57,7 +57,7 @@ async function showSiswa(req: Request, res: Response) {
             message: "Success"
         })
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             error: error || 'An error occurred'
         });
     } finally {
