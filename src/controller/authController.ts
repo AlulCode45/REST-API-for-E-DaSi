@@ -20,7 +20,7 @@ async function login(req: Request, res: Response) {
             });
         }
 
-        const expireIn: number = 60 * 60 * 2
+        const expireIn: number = 60 * 60 * 5
 
         const token = jwt.sign({
             id: user.id,

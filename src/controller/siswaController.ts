@@ -162,7 +162,7 @@ async function updateSiswa(req: Request, res: Response) {
             nama: nama,
             alamat: alamat,
             jenisKelamin: jenisKelamin,
-            kelasId: kelasId,
+            kelasId: parseInt(kelasId),
             nis: nis,
             tanggalLahir: new Date(tanggalLahir)
         }
@@ -184,7 +184,7 @@ async function updateSiswa(req: Request, res: Response) {
                 nama: nama,
                 alamat: alamat,
                 jenisKelamin: jenisKelamin,
-                kelasId: kelasId,
+                kelasId: parseInt(kelasId),
                 nis: nis,
                 tanggalLahir: tanggalLahir
             }
