@@ -82,8 +82,8 @@ async function insertKelas(req: Request, res: Response) {
     const { nama, jurusanId, tahunAjaranId } = req.body
     try {
         const saveKelas = {
-            jurusanId: jurusanId,
-            tahunAjaranId: tahunAjaranId,
+            jurusanId: parseInt(jurusanId),
+            tahunAjaranId: parseInt(tahunAjaranId),
             nama: nama
         }
 
@@ -113,8 +113,8 @@ async function updateKelas(req: Request, res: Response) {
     const { nama, jurusanId, tahunAjaranId } = req.body
     try {
         const newData = {
-            jurusanId: jurusanId,
-            tahunAjaranId: tahunAjaranId,
+            jurusanId: parseInt(jurusanId),
+            tahunAjaranId: parseInt(tahunAjaranId),
             nama: nama
         }
         await prisma.kelas.update({
