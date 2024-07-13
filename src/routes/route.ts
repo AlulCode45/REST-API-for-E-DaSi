@@ -6,6 +6,7 @@ import { deleteOrangTua, insertOrangTua, orangTua, showOrangTua, updateOrangTua 
 import { deleteSiswa, insertSiswa, showSiswa, siswa, updateSiswa } from "../controller/siswaController";
 import { deleteKelas, insertKelas, kelas, showKelas, updateKelas } from '../controller/kelasController';
 import { deleteTahunAjaran, insertTahunAjaran, showTahunAjaran, tahunAjaran, updateTahunAjaran } from '../controller/tahunAjaranController';
+import { deleteJurusan, insertJurusan, jurusan, showJurusan, updateJurusan } from '../controller/jurusanController';
 
 const router: Router = express.Router();
 
@@ -45,6 +46,12 @@ router.put('/kelas/:id', updateKelas)
 router.delete('/kelas/:id', deleteKelas)
 router.get('/kelas/:id', showKelas)
 
+//Jurusan router
+router.get('/jurusan', jurusan)
+router.post('/jurusan', insertJurusan)
+router.put('/jurusan/:id', updateJurusan)
+router.delete('/jurusan/:id', deleteJurusan)
+router.get('/jurusan/:id', showJurusan)
 
 //Kelas router
 router.get('/tahun-ajaran', tahunAjaran)
